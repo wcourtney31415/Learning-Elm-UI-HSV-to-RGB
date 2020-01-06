@@ -92,7 +92,7 @@ view model =
                     )
                 )
             , Input.button
-                [ Background.color white
+                [ Background.color buttonColor
                 , Font.color black
                 , paddingXY 10 10
                 , Border.rounded 3
@@ -104,8 +104,8 @@ view model =
             ]
 
 
-white =
-    rgb255 255 255 255
+buttonColor =
+    rgb255 230 230 230
 
 
 black =
