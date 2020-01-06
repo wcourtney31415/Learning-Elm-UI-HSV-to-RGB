@@ -9,7 +9,7 @@ type alias Input =
 
 
 type alias Data =
-    { h : Float
+    { h : Int
     , s : Float
     , v : Float
     , r : Float
@@ -30,7 +30,7 @@ type alias Results =
 
 dataIncluding : Input -> Data
 dataIncluding input =
-    { h = toFloat input.h
+    { h = input.h
     , s = input.s
     , v = input.v
     , r = 0
@@ -59,7 +59,7 @@ solveM data =
 
 solveX : Data -> Data
 solveX data =
-    { data | x = data.c * (1 - abs (floatModulous (data.h / 60) 2 0 - 1)) }
+    { data | x = data.c * (1 - abs (floatModulous (toFloat data.h / 60) 2 0 - 1)) }
 
 
 floatModulous : Float -> Float -> Int -> Float
