@@ -30,9 +30,9 @@ type alias Model =
 
 init : Model
 init =
-    { h = 173
-    , s = 0.5
-    , v = 0.2
+    { h = 120
+    , s = 1
+    , v = 0.5
     , r = 0
     , g = 0
     , b = 0
@@ -57,7 +57,7 @@ update msg model =
                 results =
                     hsvToRgb input
             in
-            { model
+            { myModel
                 | r = results.r
                 , g = results.g
                 , b = results.b
@@ -91,15 +91,71 @@ view model =
                         ++ String.fromInt model.b
                     )
                 )
-            , Input.button
-                [ Background.color buttonColor
-                , Font.color black
-                , paddingXY 10 10
-                , Border.rounded 3
-                , centerX
+            , Input.slider
+                [ Element.height (Element.px 30)
+                , Element.behindContent
+                    (Element.el
+                        [ Element.width Element.fill
+                        , Element.height (Element.px 2)
+                        , Element.centerY
+                        , Background.color buttonColor
+                        , Border.rounded 2
+                        ]
+                        Element.none
+                    )
                 ]
-                { onPress = Just <| ConvertBtnPressed model
-                , label = Element.text "Convert"
+                { onChange = \new -> ConvertBtnPressed { model | h = round new }
+                , label = Input.labelAbove [] (text "Hue")
+                , min = 0
+                , max = 360
+                , step = Just 1
+                , value = toFloat model.h
+                , thumb =
+                    Input.defaultThumb
+                }
+            , Input.slider
+                [ Element.height (Element.px 30)
+                , Element.behindContent
+                    (Element.el
+                        [ Element.width Element.fill
+                        , Element.height (Element.px 2)
+                        , Element.centerY
+                        , Background.color buttonColor
+                        , Border.rounded 2
+                        ]
+                        Element.none
+                    )
+                ]
+                { onChange = \new -> ConvertBtnPressed { model | s = new }
+                , label = Input.labelAbove [] (text "Saturation")
+                , min = 0
+                , max = 1
+                , step = Just 0.01
+                , value = model.s
+                , thumb =
+                    Input.defaultThumb
+                }
+            , Input.slider
+                [ Element.height (Element.px 30)
+                , Element.behindContent
+                    (Element.el
+                        [ Element.width Element.fill
+                        , Element.height (Element.px 2)
+                        , Element.centerY
+                        , Background.color buttonColor
+                        , Border.rounded 2
+                        ]
+                        Element.none
+                    )
+                ]
+                { onChange = \new -> ConvertBtnPressed { model | v = new }
+                , label = Input.labelAbove [] (text "Value")
+                , min = 0
+                , max = 1
+                , step = Just 0.01
+                , value = model.v
+                , thumb =
+                    Input.defaultThumb
                 }
             ]
 
