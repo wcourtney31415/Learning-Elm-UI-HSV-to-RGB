@@ -30,9 +30,9 @@ type alias Model =
 
 init : Model
 init =
-    { h = 120
-    , s = 1
-    , v = 0.5
+    { h = 0
+    , s = 0
+    , v = 0
     , r = 0
     , g = 0
     , b = 0
@@ -40,13 +40,13 @@ init =
 
 
 type Msg
-    = ConvertBtnPressed Model
+    = SliderMoved Model
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        ConvertBtnPressed myModel ->
+        SliderMoved myModel ->
             let
                 input =
                     { h = myModel.h
@@ -69,95 +69,185 @@ view model =
         []
     <|
         Element.column [ width fill, spacing 20, padding 40 ]
-            [ Element.el
-                [ centerX ]
-                (text
-                    ("H: "
-                        ++ String.fromInt model.h
-                        ++ " S: "
-                        ++ String.fromFloat model.s
-                        ++ " V: "
-                        ++ String.fromFloat model.v
-                    )
-                )
-            , Element.el
-                [ centerX ]
-                (text
-                    ("R: "
-                        ++ String.fromInt model.r
-                        ++ " G: "
-                        ++ String.fromInt model.g
-                        ++ " B: "
-                        ++ String.fromInt model.b
-                    )
-                )
-            , Input.slider
-                [ Element.height (Element.px 30)
-                , Element.behindContent
-                    (Element.el
-                        [ Element.width Element.fill
-                        , Element.height (Element.px 2)
-                        , Element.centerY
-                        , Background.color buttonColor
-                        , Border.rounded 2
-                        ]
-                        Element.none
-                    )
+            [ hsvLabel model
+            , rgbLabel model
+            , Element.row [ width fill, spacing 20 ]
+                [ hsvSlider model
+                , rgbSlider model
                 ]
-                { onChange = \new -> ConvertBtnPressed { model | h = round new }
-                , label = Input.labelAbove [] (text "Hue")
-                , min = 0
-                , max = 360
-                , step = Just 1
-                , value = toFloat model.h
-                , thumb =
-                    Input.defaultThumb
-                }
-            , Input.slider
-                [ Element.height (Element.px 30)
-                , Element.behindContent
-                    (Element.el
-                        [ Element.width Element.fill
-                        , Element.height (Element.px 2)
-                        , Element.centerY
-                        , Background.color buttonColor
-                        , Border.rounded 2
-                        ]
-                        Element.none
-                    )
-                ]
-                { onChange = \new -> ConvertBtnPressed { model | s = new }
-                , label = Input.labelAbove [] (text "Saturation")
-                , min = 0
-                , max = 1
-                , step = Just 0.01
-                , value = model.s
-                , thumb =
-                    Input.defaultThumb
-                }
-            , Input.slider
-                [ Element.height (Element.px 30)
-                , Element.behindContent
-                    (Element.el
-                        [ Element.width Element.fill
-                        , Element.height (Element.px 2)
-                        , Element.centerY
-                        , Background.color buttonColor
-                        , Border.rounded 2
-                        ]
-                        Element.none
-                    )
-                ]
-                { onChange = \new -> ConvertBtnPressed { model | v = new }
-                , label = Input.labelAbove [] (text "Value")
-                , min = 0
-                , max = 1
-                , step = Just 0.01
-                , value = model.v
-                , thumb =
-                    Input.defaultThumb
-                }
             ]
+
+
+hsvLabel model =
+    Element.el
+        [ centerX ]
+        (text
+            ("H: "
+                ++ String.fromInt model.h
+                ++ " S: "
+                ++ String.fromFloat model.s
+                ++ " V: "
+                ++ String.fromFloat model.v
+            )
+        )
+
+
+rgbLabel model =
+    Element.el
+        [ centerX ]
+        (text
+            ("R: "
+                ++ String.fromInt model.r
+                ++ " G: "
+                ++ String.fromInt model.g
+                ++ " B: "
+                ++ String.fromInt model.b
+            )
+        )
+
+
+hsvSlider : Model -> Element Msg
+hsvSlider model =
+    Element.column [ width fill ]
+        [ Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | h = round new }
+            , label = Input.labelAbove [] (text "Hue")
+            , min = 0
+            , max = 360
+            , step = Just 1
+            , value = toFloat model.h
+            , thumb =
+                Input.defaultThumb
+            }
+        , Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | s = new }
+            , label = Input.labelAbove [] (text "Saturation")
+            , min = 0
+            , max = 1
+            , step = Just 0.01
+            , value = model.s
+            , thumb =
+                Input.defaultThumb
+            }
+        , Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | v = new }
+            , label = Input.labelAbove [] (text "Value")
+            , min = 0
+            , max = 1
+            , step = Just 0.01
+            , value = model.v
+            , thumb =
+                Input.defaultThumb
+            }
+        ]
+
+
+rgbSlider : Model -> Element Msg
+rgbSlider model =
+    Element.column [ width fill ]
+        [ Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | h = round new }
+            , label = Input.labelAbove [] (text "Red")
+            , min = 0
+            , max = 255
+            , step = Just 1
+            , value = toFloat model.r
+            , thumb =
+                Input.defaultThumb
+            }
+        , Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | s = new }
+            , label = Input.labelAbove [] (text "Green")
+            , min = 0
+            , max = 255
+            , step = Just 1
+            , value = toFloat model.g
+            , thumb =
+                Input.defaultThumb
+            }
+        , Input.slider
+            [ Element.height (Element.px 30)
+            , Element.behindContent
+                (Element.el
+                    [ Element.width Element.fill
+                    , Element.height (Element.px 2)
+                    , Element.centerY
+                    , Background.color buttonColor
+                    , Border.rounded 2
+                    ]
+                    Element.none
+                )
+            ]
+            { onChange = \new -> SliderMoved { model | v = new }
+            , label = Input.labelAbove [] (text "Blue")
+            , min = 0
+            , max = 255
+            , step = Just 1
+            , value = toFloat model.b
+            , thumb =
+                Input.defaultThumb
+            }
+        ]
 
 
 buttonColor =
