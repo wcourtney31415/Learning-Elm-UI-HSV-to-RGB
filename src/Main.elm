@@ -68,14 +68,31 @@ view model =
     Element.layout
         []
     <|
-        Element.column [ width fill, spacing 20, padding 40 ]
+        Element.column
+            [ width fill
+            , spacing 20
+            , padding 40
+            ]
             [ hsvLabel model
+            , colorBlock model
             , rgbLabel model
             , Element.row [ width fill, spacing 20 ]
                 [ hsvSlider model
                 , rgbSlider model
                 ]
             ]
+
+
+colorBlock model =
+    Input.button
+        [ Background.color <| rgb255 model.r model.g model.b
+        , width <| px 200
+        , height <| px 200
+        , centerX
+        ]
+        { onPress = Nothing
+        , label = text " "
+        }
 
 
 hsvLabel model =
