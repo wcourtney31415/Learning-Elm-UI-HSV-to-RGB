@@ -73,10 +73,15 @@ view model =
             , spacing 20
             , padding 40
             ]
-            [ hsvLabel model
+            [ header
+            , hsvLabel model
             , colorBlock model
             , rgbLabel model
-            , Element.row [ width fill, spacing 20 ]
+            , Element.row
+                [ width fill
+                , padding 20
+                , spacing 20
+                ]
                 [ hsvSlider model
                 , rgbSlider model
                 ]
@@ -93,6 +98,14 @@ colorBlock model =
         { onPress = Nothing
         , label = text " "
         }
+
+
+header =
+    Element.el
+        [ centerX ]
+        (text
+            "HSV <--> RGB"
+        )
 
 
 hsvLabel model =
