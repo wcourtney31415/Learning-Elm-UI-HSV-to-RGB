@@ -41,13 +41,14 @@ init =
 
 
 type Msg
-    = SliderMoved Model
+    = HsvSliderMoved Model
+    | RgbSliderMoved Model
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        SliderMoved myModel ->
+        HsvSliderMoved myModel ->
             let
                 input =
                     { h = myModel.h
@@ -64,6 +65,23 @@ update msg model =
                 , b = results.b
             }
 
+        RgbSliderMoved myModel ->
+            let
+                input =
+                    { r = myModel.r
+                    , g = myModel.g
+                    , b = myModel.b
+                    }
+
+                results =
+                    rgbToHsv input
+            in
+            { myModel
+                | h = results.h
+                , s = results.s
+                , v = results.v
+            }
+
 
 view model =
     Element.layout
@@ -75,8 +93,8 @@ view model =
             , padding 40
             ]
             [ header
-            , hsvLabel model
             , colorBlock model
+            , hsvLabel model
             , rgbLabel model
             , Element.wrappedRow
                 [ width fill
@@ -156,13 +174,13 @@ hsvSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | h = round new }
+            { onChange = \new -> HsvSliderMoved { model | h = round new }
             , label = Input.labelAbove [] (text "Hue")
             , min = 0
             , max = 360
@@ -178,13 +196,13 @@ hsvSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | s = new }
+            { onChange = \new -> HsvSliderMoved { model | s = new }
             , label = Input.labelAbove [] (text "Saturation")
             , min = 0
             , max = 1
@@ -200,13 +218,13 @@ hsvSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | v = new }
+            { onChange = \new -> HsvSliderMoved { model | v = new }
             , label = Input.labelAbove [] (text "Value")
             , min = 0
             , max = 1
@@ -236,13 +254,13 @@ rgbSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | h = round new }
+            { onChange = \new -> RgbSliderMoved { model | r = round new }
             , label = Input.labelAbove [] (text "Red")
             , min = 0
             , max = 255
@@ -258,13 +276,13 @@ rgbSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | s = new }
+            { onChange = \new -> RgbSliderMoved { model | g = round new }
             , label = Input.labelAbove [] (text "Green")
             , min = 0
             , max = 255
@@ -280,13 +298,13 @@ rgbSlider model =
                     [ Element.width Element.fill
                     , Element.height (Element.px 2)
                     , Element.centerY
-                    , Background.color buttonColor
+                    , Background.color sliderBarColor
                     , Border.rounded 2
                     ]
                     Element.none
                 )
             ]
-            { onChange = \new -> SliderMoved { model | v = new }
+            { onChange = \new -> RgbSliderMoved { model | b = round new }
             , label = Input.labelAbove [] (text "Blue")
             , min = 0
             , max = 255
@@ -298,9 +316,5 @@ rgbSlider model =
         ]
 
 
-buttonColor =
+sliderBarColor =
     rgb255 230 230 230
-
-
-black =
-    rgb255 0 1 0
