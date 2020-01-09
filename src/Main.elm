@@ -77,7 +77,7 @@ view model =
             , hsvLabel model
             , colorBlock model
             , rgbLabel model
-            , Element.row
+            , Element.wrappedRow
                 [ width fill
                 , padding 20
                 , spacing 20
@@ -110,7 +110,8 @@ header =
 
 hsvLabel model =
     Element.el
-        [ centerX ]
+        [ centerX
+        ]
         (text
             ("H: "
                 ++ String.fromInt model.h
@@ -138,7 +139,15 @@ rgbLabel model =
 
 hsvSlider : Model -> Element Msg
 hsvSlider model =
-    Element.column [ width fill ]
+    Element.column
+        [ centerX
+        , width fill
+        , width
+            (fill
+                |> maximum 300
+                |> minimum 225
+            )
+        ]
         [ Input.slider
             [ Element.height (Element.px 30)
             , Element.behindContent
@@ -210,7 +219,15 @@ hsvSlider model =
 
 rgbSlider : Model -> Element Msg
 rgbSlider model =
-    Element.column [ width fill ]
+    Element.column
+        [ centerX
+        , width fill
+        , width
+            (fill
+                |> maximum 300
+                |> minimum 225
+            )
+        ]
         [ Input.slider
             [ Element.height (Element.px 30)
             , Element.behindContent
