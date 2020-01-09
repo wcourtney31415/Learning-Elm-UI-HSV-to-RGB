@@ -1,4 +1,4 @@
-module HsvToRgb exposing (Data, hsvToRgb)
+module HsvToRgb exposing (hsvToRgb)
 
 
 type alias Input =
@@ -59,16 +59,15 @@ solveM data =
 
 solveX : Data -> Data
 solveX data =
-    { data | x = data.c * (1 - abs (floatModulous (toFloat data.h / 60) 2 0 - 1)) }
+    { data | x = data.c * (1 - abs (floatMod (toFloat data.h / 60) 2 - 1)) }
 
 
-floatModulous : Float -> Float -> Int -> Float
-floatModulous destination divisor iterator =
-    if ((divisor * toFloat iterator) + 1) > destination then
-        destination - (divisor * toFloat iterator)
+floatMod a b =
+    if a >= b then
+        floatMod (a - b) b
 
     else
-        floatModulous destination divisor (iterator + 1)
+        a
 
 
 calcRange : Data -> Data
