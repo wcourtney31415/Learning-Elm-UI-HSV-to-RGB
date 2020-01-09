@@ -8,6 +8,7 @@ import Element.Font as Font
 import Element.Input as Input
 import HsvToRgb exposing (hsvToRgb)
 import Html exposing (Html)
+import RgbToHsv exposing (rgbToHsv)
 
 
 main =
