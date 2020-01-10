@@ -122,7 +122,18 @@ colorBlock model =
 
 header =
     Element.el
-        [ centerX ]
+        [ centerX
+        , Font.color (Element.rgb 0 0 0)
+        , Font.size 30
+        , Font.bold
+        , Font.family
+            [ Font.external
+                { url = "https://fonts.googleapis.com/css?family=Oswald"
+                , name = "Oswald"
+                }
+            , Font.sansSerif
+            ]
+        ]
         (text
             "HSV <--> RGB"
         )
