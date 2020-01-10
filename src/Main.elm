@@ -113,6 +113,7 @@ colorBlock model =
         , width <| px 200
         , height <| px 200
         , centerX
+        , Border.color (rgb 0 0 0)
         ]
         { onPress = Nothing
         , label = text " "

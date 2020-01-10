@@ -18,9 +18,9 @@ type alias Data =
     , rPrime : Float
     , gPrime : Float
     , bPrime : Float
-    , cMax : Int
-    , cMin : Int
-    , delta : Int
+    , cMax : Float
+    , cMin : Float
+    , delta : Float
     }
 
 
@@ -39,9 +39,9 @@ dataIncluding input =
     , r = input.r
     , g = input.g
     , b = input.b
-    , rPrime = 0
-    , gPrime = 0
-    , bPrime = 0
+    , rPrime = prime input.r
+    , gPrime = prime input.g
+    , bPrime = prime input.b
     , cMax = 0
     , cMin = 0
     , delta = 0
@@ -68,19 +68,19 @@ rgbToHsv input =
     solveHSV <| solveV <| solveS <| solveH <| dataIncluding input
 
 
-prime : Float -> Float
+prime : Int -> Float
 prime myColor =
-    myColor / 255
+    toFloat myColor / 255
 
 
 cMax : Data -> Data
 cMax data =
-    { data | cMax = max data.r <| max data.g data.b }
+    { data | cMax = max data.rPrime <| max data.gPrime data.bPrime }
 
 
 cMin : Data -> Data
 cMin data =
-    { data | cMin = min data.r <| min data.g data.b }
+    { data | cMin = min data.rPrime <| min data.gPrime data.bPrime }
 
 
 delta : Data -> Data
@@ -93,14 +93,14 @@ solveH data =
     if delta data == cMin data then
         { data | h = 0 }
 
-    else if data.cMax == data.r then
-        { data | h = round (floatMod (60 * ((toFloat data.g - toFloat data.b) / toFloat data.delta) + 360) 360) }
+    else if data.cMax == toFloat data.r then
+        { data | h = round (floatMod (60 * ((toFloat data.g - toFloat data.b) / data.delta) + 360) 360) }
 
-    else if data.cMax == data.g then
-        { data | h = round (floatMod (60 * ((toFloat data.b - toFloat data.r) / toFloat data.delta) + 120) 360) }
+    else if data.cMax == toFloat data.g then
+        { data | h = round (floatMod (60 * ((toFloat data.b - toFloat data.r) / data.delta) + 120) 360) }
 
-    else if data.cMax == data.b then
-        { data | h = round (floatMod (60 * ((toFloat data.r - toFloat data.g / toFloat data.delta) + 240)) 360) }
+    else if data.cMax == toFloat data.b then
+        { data | h = round (floatMod (60 * ((toFloat data.r - toFloat data.g / data.delta) + 240)) 360) }
 
     else
         data
@@ -108,16 +108,16 @@ solveH data =
 
 solveS : Data -> Data
 solveS data =
-    if data.cMax == data.b then
+    if data.cMax == toFloat data.b then
         { data | s = 0 }
 
     else
-        { data | s = (toFloat data.delta / toFloat data.cMax) * 100 }
+        { data | s = (data.delta / data.cMax) * 100 }
 
 
 solveV : Data -> Data
 solveV data =
-    { data | v = toFloat data.cMax * 100 }
+    { data | v = data.cMax * 100 }
 
 
 floatMod a b =
