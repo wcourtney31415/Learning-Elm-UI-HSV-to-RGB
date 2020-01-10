@@ -70,12 +70,7 @@ solveHSV data =
 
 rgbToHsv : Input -> Results
 rgbToHsv input =
-    solveHSV <| print "After Solving V" <| solveV <| print "After Solving S" <| solveS <| print "After Solving H" <| solveH <| print "After Priming" <| primeRGB <| print "After Loading input" <| dataIncluding input
-
-
-print : String -> Data -> Data
-print str data =
-    Debug.log str data
+    dataIncluding input |> primeRGB |> solveCMin |> solveCMax |> solveDelta |> solveH |> solveS |> solveV |> solveHSV
 
 
 prime : Int -> Float
@@ -83,24 +78,24 @@ prime myColor =
     toFloat myColor / 255
 
 
-cMax : Data -> Data
-cMax data =
-    print "After Solving cMax" { data | cMax = max data.rPrime <| max data.gPrime data.bPrime }
+solveCMax : Data -> Data
+solveCMax data =
+    { data | cMax = max data.rPrime <| max data.gPrime data.bPrime }
 
 
-cMin : Data -> Data
-cMin data =
-    print "After Solving cMin" { data | cMin = min data.rPrime <| min data.gPrime data.bPrime }
+solveCMin : Data -> Data
+solveCMin data =
+    { data | cMin = min data.rPrime <| min data.gPrime data.bPrime }
 
 
-delta : Data -> Data
-delta data =
+solveDelta : Data -> Data
+solveDelta data =
     { data | delta = data.cMax - data.cMin }
 
 
 solveH : Data -> Data
 solveH data =
-    if delta data == cMin data then
+    if data.delta == data.cMin then
         { data | h = 0 }
 
     else if data.cMax == data.rPrime then
