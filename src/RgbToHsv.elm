@@ -39,13 +39,18 @@ dataIncluding input =
     , r = input.r
     , g = input.g
     , b = input.b
-    , rPrime = prime input.r
-    , gPrime = prime input.g
-    , bPrime = prime input.b
+    , rPrime = 0
+    , gPrime = 0
+    , bPrime = 0
     , cMax = 0
     , cMin = 0
     , delta = 0
     }
+
+
+primeRGB : Data -> Data
+primeRGB data =
+    { data | rPrime = prime data.r, gPrime = prime data.g, bPrime = prime data.b }
 
 
 solveHSV : Data -> Results
@@ -65,7 +70,12 @@ solveHSV data =
 
 rgbToHsv : Input -> Results
 rgbToHsv input =
-    solveHSV <| solveV <| solveS <| solveH <| dataIncluding input
+    solveHSV <| print "After Solving V" <| solveV <| print "After Solving S" <| solveS <| print "After Solving H" <| solveH <| print "After Priming" <| primeRGB <| print "After Loading input" <| dataIncluding input
+
+
+print : String -> Data -> Data
+print str data =
+    Debug.log str data
 
 
 prime : Int -> Float
@@ -75,12 +85,12 @@ prime myColor =
 
 cMax : Data -> Data
 cMax data =
-    { data | cMax = max data.rPrime <| max data.gPrime data.bPrime }
+    print "After Solving cMax" { data | cMax = max data.rPrime <| max data.gPrime data.bPrime }
 
 
 cMin : Data -> Data
 cMin data =
-    { data | cMin = min data.rPrime <| min data.gPrime data.bPrime }
+    print "After Solving cMin" { data | cMin = min data.rPrime <| min data.gPrime data.bPrime }
 
 
 delta : Data -> Data
