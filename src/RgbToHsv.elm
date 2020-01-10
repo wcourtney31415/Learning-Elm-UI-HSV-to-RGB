@@ -1,5 +1,7 @@
 module RgbToHsv exposing (rgbToHsv)
 
+import Round
+
 
 type alias Input =
     { r : Int
@@ -60,10 +62,10 @@ solveHSV data =
             data.h
 
         myS =
-            data.s
+            Round.roundNum 2 data.s
 
         myV =
-            data.v
+            Round.roundNum 2 data.v
     in
     { h = myH, s = myS, v = myV }
 
@@ -113,16 +115,16 @@ solveH data =
 
 solveS : Data -> Data
 solveS data =
-    if data.cMax == data.bPrime then
+    if data.cMax == 0 then
         { data | s = 0 }
 
     else
-        { data | s = (data.delta / data.cMax) * 100 }
+        { data | s = data.delta / data.cMax }
 
 
 solveV : Data -> Data
 solveV data =
-    { data | v = data.cMax * 100 }
+    { data | v = data.cMax }
 
 
 floatMod a b =
