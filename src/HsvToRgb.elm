@@ -12,9 +12,12 @@ type alias Data =
     { h : Int
     , s : Float
     , v : Float
-    , r : Float
-    , g : Float
-    , b : Float
+    , r : Int
+    , g : Int
+    , b : Int
+    , rPrime : Float
+    , gPrime : Float
+    , bPrime : Float
     , c : Float
     , x : Float
     , m : Float
@@ -36,6 +39,9 @@ dataIncluding input =
     , r = 0
     , g = 0
     , b = 0
+    , rPrime = 0
+    , gPrime = 0
+    , bPrime = 0
     , c = 0
     , x = 0
     , m = 0
@@ -73,22 +79,22 @@ floatMod a b =
 calcRange : Data -> Data
 calcRange data =
     if 0 <= data.h && data.h < 60 then
-        { data | r = data.c, g = data.x, b = 0 }
+        { data | rPrime = data.c, gPrime = data.x, bPrime = 0 }
 
     else if 60 <= data.h && data.h < 120 then
-        { data | r = data.x, g = data.c, b = 0 }
+        { data | rPrime = data.x, gPrime = data.c, bPrime = 0 }
 
     else if 120 <= data.h && data.h < 180 then
-        { data | r = 0, g = data.c, b = data.x }
+        { data | rPrime = 0, gPrime = data.c, bPrime = data.x }
 
     else if 180 <= data.h && data.h < 240 then
-        { data | r = 0, g = data.x, b = data.c }
+        { data | rPrime = 0, gPrime = data.x, bPrime = data.c }
 
     else if 240 <= data.h && data.h < 300 then
-        { data | r = data.x, g = 0, b = data.c }
+        { data | rPrime = data.x, gPrime = 0, bPrime = data.c }
 
     else if 300 <= data.h && data.h < 360 then
-        { data | r = data.c, g = 0, b = data.x }
+        { data | rPrime = data.c, gPrime = 0, bPrime = data.x }
 
     else
         data
@@ -103,12 +109,12 @@ solveRGB : Data -> Results
 solveRGB data =
     let
         myR =
-            round <| unprime data.r data.m
+            round <| unprime data.rPrime data.m
 
         myG =
-            round <| unprime data.g data.m
+            round <| unprime data.gPrime data.m
 
         myB =
-            round <| unprime data.b data.m
+            round <| unprime data.bPrime data.m
     in
     { r = myR, g = myG, b = myB }
