@@ -33,9 +33,9 @@ type alias Results =
 
 dataIncluding : Input -> Data
 dataIncluding input =
-    { h = 0
-    , s = 0
-    , v = 0
+    { h = 303
+    , s = 303
+    , v = 303
     , r = input.r
     , g = input.g
     , b = input.b
@@ -93,14 +93,14 @@ solveH data =
     if delta data == cMin data then
         { data | h = 0 }
 
-    else if data.cMax == toFloat data.r then
-        { data | h = round (floatMod (60 * ((toFloat data.g - toFloat data.b) / data.delta) + 360) 360) }
+    else if data.cMax == data.rPrime then
+        { data | h = round (floatMod (60 * ((data.gPrime - data.bPrime) / data.delta) + 360) 360) }
 
-    else if data.cMax == toFloat data.g then
-        { data | h = round (floatMod (60 * ((toFloat data.b - toFloat data.r) / data.delta) + 120) 360) }
+    else if data.cMax == data.gPrime then
+        { data | h = round (floatMod (60 * ((data.bPrime - data.rPrime) / data.delta) + 120) 360) }
 
-    else if data.cMax == toFloat data.b then
-        { data | h = round (floatMod (60 * ((toFloat data.r - toFloat data.g / data.delta) + 240)) 360) }
+    else if data.cMax == data.bPrime then
+        { data | h = round (floatMod (60 * ((data.rPrime - data.gPrime / data.delta) + 240)) 360) }
 
     else
         data
@@ -108,7 +108,7 @@ solveH data =
 
 solveS : Data -> Data
 solveS data =
-    if data.cMax == toFloat data.b then
+    if data.cMax == data.bPrime then
         { data | s = 0 }
 
     else
